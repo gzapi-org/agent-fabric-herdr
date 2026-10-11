@@ -94,8 +94,13 @@ fn test_headless_server_with_event_hub(event_hub: api::EventHub) -> HeadlessServ
     let server_stop = ServerStop::default();
     let should_quit = server_stop.flag().clone();
     #[cfg(windows)]
-    spawn_windows_client_accept_thread(listener, should_quit.clone(), server_event_tx.clone())
-        .expect("spawn client accept thread");
+    spawn_windows_client_accept_thread(
+        listener,
+        should_quit.clone(),
+        server_event_tx.clone(),
+        app.socket_access.clone(),
+    )
+    .expect("spawn client accept thread");
     let server_keybindings = app_keybindings(&app);
     let headless_size = app.state.headless_size;
 
