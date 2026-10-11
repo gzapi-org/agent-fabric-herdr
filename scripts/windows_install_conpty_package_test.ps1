@@ -247,7 +247,7 @@ try {
             -LocalPackageIdentity "0.0.0-preview.local-package" `
             -LocalPackageSha256 ("0" * 64)
     } catch {
-        if ($_.Exception.Message -notlike "Downloaded Herdr checksum did not match.*") {
+        if ($_.Exception.Message -notlike "Downloaded FleetDeck checksum did not match.*") {
             throw
         }
         $badLocalChecksumRejected = $true
@@ -593,7 +593,7 @@ exit /b 1
             -InstallDir $preserveBin `
             -ExpectedBuildId "installer-test"
     } catch {
-        if ($_.Exception.Message -notlike "Refusing to run unrecognized Herdr command*") {
+        if ($_.Exception.Message -notlike "Refusing to run unrecognized FleetDeck command*") {
             throw
         }
         $unrecognizedCommandRejected = $true

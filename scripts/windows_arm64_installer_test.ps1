@@ -11,6 +11,17 @@ if ($architecture -ne "Arm64") {
     throw "This test requires Windows ARM64, found $architecture."
 }
 
+# This test installs the published preview over the network, so it can only run
+# once FleetDeck has published one. The checked-out preview manifest is the
+# record of what is published (the preview workflow commits it with each
+# release), so an empty record means there is nothing to install yet, not an
+# installer fault.
+$publishedPreview = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot "..\distribution\preview.json") | ConvertFrom-Json
+if ($null -eq $publishedPreview.assets.PSObject.Properties["windows-x86_64"]) {
+    Write-Host "::warning::No FleetDeck preview with a windows-x86_64 asset is published yet (distribution/preview.json); the live ARM64 installer test did not run."
+    exit 0
+}
+
 $root = Join-Path $env:RUNNER_TEMP "herdr-windows-arm64-installer-test"
 $env:AGENT_FABRIC_FLEETDECK_HOME = Join-Path $root "home"
 $env:AGENT_FABRIC_FLEETDECK_INSTALL_DIR = Join-Path $root "bin"
